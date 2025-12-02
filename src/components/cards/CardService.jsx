@@ -14,9 +14,7 @@ const CardService = ({ title, content, ...rest }) => {
                         <span className="text-bold">{title}</span>
                     </h4>
                     <p className="card-text">{content}</p>
-                    <div>
-                        <span {...rest} />
-                    </div>
+                    <div><span {...rest} /></div>
                 </div>
             </div>
         </div>

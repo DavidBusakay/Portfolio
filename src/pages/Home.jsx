@@ -1,14 +1,19 @@
-import { FaFacebook, FaGithub, FaLinkedin, FaPhp, FaPython } from "react-icons/fa6"
-import LineImg from "../assets/img/detail.png"
+import { FaFacebook, FaGithub, FaLinkedin, FaPhp } from "react-icons/fa6"
 import FooterImg from "../assets/img/background-footer-portfolio.png"
 import Btn from "../components/Btn"
 import { FaArrowDown, FaBootstrap, FaCss3Alt, FaDatabase, FaDownload, FaEnvelope, FaHtml5, FaReact } from "react-icons/fa"
-import CardPortfolio from "../components/CardPortfolio"
-import CardService from "../components/CardService"
+import CardPortfolio from "../components/cards/CardPortfolio"
+import CardService from "../components/cards/CardService"
 import SocialMedia from "../components/SocialMedia"
 import ContactForm from "../components/ContactForm"
-import { useEffect, useState } from "react"
-import { Button, Modal } from "react-bootstrap"
+import { useState } from "react"
+import { Button, Container, Image, Row } from "react-bootstrap"
+import { SiFlask, SiMysql, SiTailwindcss } from "react-icons/si"
+import LineDeco from "../components/LineDeco"
+import DavidBusakay from "../assets/img/david-busakay.webp"
+import TitleSection from "../components/TitleSection"
+import { dataPortfolioWeb, dataPortfolioMobile } from "../data/Portfolio"
+import ModalDetails from "../components/ModalDetails"
 
 const styles = {
     skill: {
@@ -18,49 +23,17 @@ const styles = {
 
 const Home = () => {
     const [showModal, setShowModal] = useState(false)
-    
-    useEffect(() => {
-        const allBtnContact = document.querySelectorAll("#btnContactMe")
-        const btnScrollDown = document.getElementById("btnScrollDown")
-        const targetSectionAbout = document.getElementById("aboutMe")
-        
-        const handleClickContact = () => {
-            document.getElementById("contact").scrollIntoView({ behavior: "smooth" })
-        }
-
-        // Scroll down
-        const handleClickBtnScrollDown = () => {
-            targetSectionAbout.scrollIntoView({ behavior: "smooth" })
-        }
-        const handleMouseEnterBtnScrollDown = () => {
-            btnScrollDown.style.animation = "none"
-        }
-        
-        const handleMouseOutBtnScrollDown = () => {
-            btnScrollDown.style.animation = "anim-btn 1s 0s linear infinite"
-        }
-        
-        allBtnContact.forEach(btnContact => {
-            btnContact.addEventListener("click", handleClickContact)
-        });
-        btnScrollDown.addEventListener("click", handleClickBtnScrollDown)
-        btnScrollDown.addEventListener("mouseenter", handleMouseEnterBtnScrollDown)
-        btnScrollDown.addEventListener("mouseout", handleMouseOutBtnScrollDown)
-        
-        return () => {
-            allBtnContact.forEach(btnContact => {
-                btnContact.removeEventListener("click", handleClickContact)
-            });
-        }
-    }, [])
+    const [btnScrollDownAnimation, setBtnScrollDownAnimation] = useState(true)
+    const [dataModal, setDataModal] = useState({})
+    const [isWebProject, setIsWebProject] = useState(true)
 
     return (
-        <main>
+        <>
             {/* Landing Page */}
             <section className="landing-page d-flex justify-content-center min-vh-100 py-5" id="landingPage">
-                <div className="container d-flex justify-content-center align-items-center flex-column mt-3 mb-5">
-                    <div className="row justify-content-center align-items-center text-center my-5">
-                        <div className="col-lg-12 col-md-8 col-12">
+                <Container className="d-flex justify-content-center align-items-center flex-column mt-3 mb-5">
+                    <Row className="justify-content-center align-items-center text-center my-5">
+                        <div className="col-lg-12 col-md-12 col-12">
                             <small className="title-section mb-3">Welcome</small>
                             <h1 className="display-1 text-bold mb-3">Moi c'est <span>David Busakay</span></h1>
                             <div className="d-flex justify-content-center mb-3">
@@ -68,65 +41,67 @@ const Home = () => {
                                     <p className="lead cursor typewriter-animation mb-3">Développeur Web et Mobile</p>
                                 </div>
                             </div>
-                            <div className="row justify-content-center">
-                                <div className="col-lg-4 col-md-12 col-12">
+                            <Row className="justify-content-center">
+                                <div className="col-lg-4 col-md-6 col-12 mb-lg-0 mb-md-0 mb-3">
                                     <Btn
                                         type="button"
-                                        id="btnContactMe"
                                         isOutline={false}
+                                        isLarge={true}
+                                        onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}
                                     >
-                                        <FaEnvelope className="me-3" />
+                                        <FaEnvelope className="me-3" size={22} />
                                         Contactez-moi
                                     </Btn>
                                 </div>
-                                <div className="col-lg-4 col-md-12 col-12">
+                                <div className="col-lg-4 col-md-6 col-12">
                                     <Btn
                                         type="button"
                                         isOutline={true}
+                                        isLarge={true}
                                     >
-                                        <FaDownload className="me-3" />
+                                        <FaDownload className="me-3" size={22} />
                                         Télécharger mon CV
                                     </Btn>
                                 </div>
-                            </div>
+                            </Row>
                         </div>
-                    </div>
-                    <div className="row">
-                        <button
+                    </Row>
+                    <Row>
+                        <Button
                             type="button"
-                            className="button btn-scroll-down"
-                            id="btnScrollDown"
+                            variant="btn button btn-scroll-down"
                             aria-label="Défiler vers le bas"
+                            onClick={() => {
+                                document.getElementById("aboutMe").scrollIntoView({ behavior: "smooth" })
+                            }}
+                            onMouseEnter={() => setBtnScrollDownAnimation(false)}
+                            onMouseOut={() => setBtnScrollDownAnimation(true)}
+                            style={{ animation: btnScrollDownAnimation ? "anim-btn 1s 0s linear infinite" : "none" }}
                         >
                             <FaArrowDown style={{ pointerEvents: "none" }} />
-                        </button>
-                    </div>
-                </div>
+                        </Button>
+                    </Row>
+                </Container>
             </section>
 
             {/* A propos de moi */}
             <section className="d-flex justify-content-center py-5" id="aboutMe">
-                <div className="container py-5">
-                    <div className="row justify-content-between align-items-center">
+                <Container className="py-5">
+                    <Row className="justify-content-between align-items-center">
                         <div className="col-lg-4 col-md-12 col-12 my-4">
-                            <div data-aos="zoom-in" data-aos-duration="500" style={{ overflow: "hidden" }}>
+                            <div data-aos="zoom-in" style={{ overflow: "hidden" }}>
                                 <div className="rounded-4 profil-hover w-100">
-                                    <img
-                                        src="/src/assets/img/david-busakay.webp"
+                                    <Image
+                                        src={DavidBusakay}
                                         className="w-100"
                                         alt="Image - David Busakay"
                                     />
-                                </div>
-                                <div className="name" id="myName">
-                                    <div>
-                                        <p>David Busakay</p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg-1 col-md-12 col-12"></div>
                         <div className="col-lg-7 col-md-12 col-12" id="readmeCard">
-                            <div data-aos="zoom-in" data-aos-duration="500">
+                            <div data-aos="zoom-in">
                                 <div className="card">
                                     <div className="card-body" style={{ padding: "0.7rem" }}>
                                         <div className="d-flex justify-content-center px-2 py-1">
@@ -159,43 +134,30 @@ const Home = () => {
                                                 React Native, dans l'objectif de développer des applications web Full JavaScript 
                                                 modernes et performantes ainsi que les applications mobiles.
                                             </p>
-                                            <button
+                                            <Btn
                                                 type="button"
-                                                className="btn button-outline"
-                                                id="btnContactMe"
-                                            >En savoir plus</button>
+                                                isOutline={true}
+                                                onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}
+                                            >En savoir plus</Btn>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <img
-                    src={LineImg}
-                    alt=""
-                    className="detail"
-                    data-aos="zoom-in"
-                    data-aos-duration="500"
-                />
+                    </Row>
+                </Container>
+                <LineDeco />
             </section>
 
             {/* Portfolio */}
             <section className="py-5" id="portfolio">
-                <div className="container py-5">
-                    <div className="row justify-content-center text-center">
-                        <div className="col-lg-6 col-md-8 col-12">
-                            <small className="title-section mb-2" data-aos="fade-up" data-aos-duration="500">Mes projets</small>
-                            <h1 className="fs-3" data-aos="fade-up" data-aos-duration="500">
-                                <span className="text-bold">Portfolio</span>
-                            </h1>
-                        </div>
-                    </div>
-                    <div className="row">
+                <Container className="py-5">
+                    <TitleSection title="Portfolio" label="Mes projets" />
+                    <Row>
                         <div className="card bg-transparent border-0 mb-4 menu-portfolio">
                             <div className="card-header bg-transparent border-0 redressed fs-6">
                                 <ul className="nav nav-tabs nav-pills justify-content-center card-header-tabs">
-                                    <li className="nav-item" data-aos="fade-up" data-aos-duration="500">
+                                    <li className="nav-item" data-aos="fade-up">
                                         <button
                                             className="btn button mx-lg-2 mx-md-2 mb-2 active"
                                             type="button"
@@ -206,7 +168,7 @@ const Home = () => {
                                             aria-selected="true"
                                         >Web</button>
                                     </li>
-                                    <li className="nav-item" data-aos="fade-up" data-aos-duration="500">
+                                    <li className="nav-item" data-aos="fade-up">
                                         <button
                                             className="btn button mx-lg-2 mx-md-2 mb-2"
                                             type="button"
@@ -224,107 +186,93 @@ const Home = () => {
                         <div className="tab-content">
                             {/* Projets Web */}
                             <div className="tab-pane active show fade" id="projetsWeb" aria-label="Projets Web">
-                                <div className="row">
-                                    <div className="col-lg-4 col-md-6 col-12 mb-4">
-                                        <div data-aos="zoom-in" data-aos-duration="500">
-                                            <CardPortfolio
-                                                isWebProject={true}
-                                                image="https://images.pexels.com/photos/8284731/pexels-photo-8284731.jpeg"
-                                                title="Nom du projet Web"
-                                                description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum quasi pariatur qui..."
-                                                onClick={() => setShowModal(true)}
-                                            />
+                                <Row>
+                                    {dataPortfolioWeb.map((data, index) => (
+                                        <div className="col-lg-4 col-md-6 col-12 mb-4" key={index}>
+                                            <div data-aos="zoom-in">
+                                                <CardPortfolio
+                                                    isWebProject={true}
+                                                    image={data.image}
+                                                    title={data.title}
+                                                    description={data.content}
+                                                    onClick={() => {
+                                                        setDataModal({
+                                                            "title": data.title,
+                                                            "content": data.content,
+                                                            "technologies": {
+                                                                "frontend": data.technologies.frontend,
+                                                                "backend": data.technologies.backend,
+                                                                "database": data.technologies.database
+                                                            },
+                                                            "link": data.link,
+                                                            "isNew": data.isNew
+                                                        })
+                                                        setIsWebProject(true)
+                                                        setShowModal(true)
+                                                    }}
+                                                    isNew={data.isNew ? true : false}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-4 col-md-6 col-12 mb-4">
-                                        <div data-aos="zoom-in" data-aos-duration="500">
-                                            <CardPortfolio
-                                                isWebProject={true}
-                                                image="https://images.pexels.com/photos/17485353/pexels-photo-17485353.jpeg"
-                                                title="Nom du projet Web"
-                                                description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum quasi pariatur qui..."
-                                                onClick={() => setShowModal(true)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 col-md-6 col-12 mb-4">
-                                        <div data-aos="zoom-in" data-aos-duration="500">
-                                            <CardPortfolio
-                                                isWebProject={true}
-                                                image="https://images.pexels.com/photos/8284729/pexels-photo-8284729.jpeg"
-                                                title="Nom du projet Web"
-                                                description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum quasi pariatur qui..."
-                                                onClick={() => setShowModal(true)}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                                    ))}
+                                </Row>
                             </div>
                             {/* Projets Mobile */}
                             <div className="tab-pane fade" id="projetsMobile" aria-label="Projets Mobile">
-                                <div className="row">
-                                    <div className="col-lg-4 col-md-6 col-12 mb-4">
-                                        <div data-aos="zoom-in" data-aos-duration="500">
-                                            <CardPortfolio
-                                                isWebProject={false}
-                                                image="https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg"
-                                                title="Nom du projet Mobile"
-                                                description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum quasi pariatur qui..."
-                                                onClick={() => setShowModal(true)}
-                                            />
+                                <Row>
+                                    {dataPortfolioMobile.map((data, index) => (
+                                        <div className="col-lg-4 col-md-6 col-12 mb-4" key={index}>
+                                            <div data-aos="zoom-in">
+                                                <CardPortfolio
+                                                    isWebProject={false}
+                                                    image={data.image}
+                                                    title={data.title}
+                                                    description={data.content}
+                                                    onClick={() => {
+                                                        setDataModal({
+                                                            "title": data.title,
+                                                            "content": data.content,
+                                                            "technologies": {
+                                                                "frontend": data.technologies.frontend,
+                                                                "backend": data.technologies.backend,
+                                                                "database": data.technologies.database
+                                                            },
+                                                            "link": data.link,
+                                                            "isNew": data.isNew
+                                                        })
+                                                        setIsWebProject(false)
+                                                        setShowModal(true)
+                                                    }}
+                                                    isNew={data.isNew ? true : false}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-4 col-md-6 col-12 mb-4">
-                                        <div data-aos="zoom-in" data-aos-duration="500">
-                                            <CardPortfolio
-                                                isWebProject={false}
-                                                image="https://images.pexels.com/photos/16345434/pexels-photo-16345434.jpeg"
-                                                title="Nom du projet Mobile"
-                                                description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum quasi pariatur qui..."
-                                                onClick={() => setShowModal(true)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 col-md-6 col-12 mb-4">
-                                        <div data-aos="zoom-in" data-aos-duration="500">
-                                            <CardPortfolio
-                                                isWebProject={false}
-                                                image="https://images.pexels.com/photos/17077372/pexels-photo-17077372.jpeg"
-                                                title="Nom du projet Mobile"
-                                                description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum quasi pariatur qui..."
-                                                onClick={() => setShowModal(true)}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                                    ))}
+                                </Row>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <img
-                    src={LineImg}
-                    alt=""
-                    className="detail"
-                    data-aos="zoom-in"
-                    data-aos-duration="500"
-                />
+                    </Row>
+                </Container>
+                <LineDeco />
 
                 {/* Modal */}
-                <ModalDetails show={showModal} handleClose={() => setShowModal(false)} />
+                <ModalDetails
+                    show={showModal}
+                    handleClose={() => setShowModal(false)}
+                    dataTitle={dataModal.title}
+                    dataContent={dataModal.content}
+                    technologies={dataModal.technologies}
+                    dataLink={dataModal.link}
+                    isWebProject={isWebProject}
+                    isNew={dataModal.isNew}
+                />
             </section>
 
             {/* Compétences */}
             <section className="py-5" id="competences">
-                <div className="container text-center py-5">
-                    <div className="row justify-content-center mb-5">
-                        <div className="col-lg-6 col-md-8 col-12">
-                            <small className="title-section mb-2" data-aos="fade-up" data-aos-duration="500">Mes Softskills</small>
-                            <h1 className="fs-3" data-aos="fade-up" data-aos-duration="500">
-                                <span className="text-bold">Compétences</span>
-                            </h1>
-                        </div>
-                    </div>
-                    <div className="row">
+                <Container className="text-center py-5">
+                    <TitleSection title="Compétences" label="Mes Softskills" />
+                    <Row>
                         <div className="col-lg-3 col-4 mb-5">
                             <div data-aos="flip-down">
                                 <FaHtml5 className="display-3" style={styles.skill} />
@@ -345,8 +293,20 @@ const Home = () => {
                         </div>
                         <div className="col-lg-3 col-4 mb-5">
                             <div data-aos="flip-down">
+                                <SiTailwindcss className="display-3" style={styles.skill} />
+                                <p className="mt-3">Tailwind CSS</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-4 mb-5">
+                            <div data-aos="flip-down">
                                 <FaReact className="display-3" style={styles.skill} />
                                 <p className="mt-3">React</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-4 mb-5">
+                            <div data-aos="flip-down">
+                                <FaReact className="display-3" style={styles.skill} />
+                                <p className="mt-3">React Native</p>
                             </div>
                         </div>
                         <div className="col-lg-3 col-4 mb-5">
@@ -357,13 +317,13 @@ const Home = () => {
                         </div>
                         <div className="col-lg-3 col-4 mb-5">
                             <div data-aos="flip-down">
-                                <FaPython className="display-3" style={styles.skill} />
-                                <p className="mt-3">Python</p>
+                                <SiFlask className="display-3" style={styles.skill} />
+                                <p className="mt-3">Flask</p>
                             </div>
                         </div>
                         <div className="col-lg-3 col-4 mb-5">
                             <div data-aos="flip-down">
-                                <FaDatabase className="display-3" style={styles.skill} />
+                                <SiMysql className="display-3" style={styles.skill} />
                                 <p className="mt-3">MySQL</p>
                             </div>
                         </div>
@@ -373,31 +333,18 @@ const Home = () => {
                                 <p className="mt-3">GitHub</p>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <img
-                    src={LineImg}
-                    alt=""
-                    className="detail"
-                    data-aos="zoom-in"
-                    data-aos-duration="500"
-                />
+                    </Row>
+                </Container>
+                <LineDeco />
             </section>
 
             {/* Services */}
             <section className="py-5" id="services">
-                <div className="container py-5">
-                    <div className="row justify-content-center text-center mb-5">
-                        <div className="col-lg-6 col-md-8 col-12">
-                            <small className="title-section mb-2" data-aos="fade-up" data-aos-duration="500">Mes domaines</small>
-                            <h1 className="fs-3" data-aos="fade-up" data-aos-duration="500">
-                                <span className="text-bold">Services</span>
-                            </h1>
-                        </div>
-                    </div>
-                    <div className="row">
+                <Container className="py-5">
+                    <TitleSection title="Services" label="Mes domaines" />
+                    <Row>
                         <div className="col-lg-4 col-md-6 col-12" id="serviceCard">
-                            <div data-aos="flip-right" data-aos-duration="500">
+                            <div data-aos="flip-right">
                                 <CardService
                                     title="Développement Sites Web"
                                     content="Grâce à mon expertise, je conçois des sites web de haute qualité, 
@@ -412,7 +359,7 @@ const Home = () => {
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6 col-12" id="serviceCard">
-                            <div data-aos="flip-right" data-aos-duration="500">
+                            <div data-aos="flip-right">
                                 <CardService
                                     title="Développement Apps Web"
                                     content="J'exploite des technologies modernes telles que Flask pour créer des 
@@ -422,52 +369,39 @@ const Home = () => {
                                     <FaCss3Alt className="me-2" />
                                     <FaBootstrap className="me-2" />
                                     <FaReact className="me-2" />
-                                    <FaPython className="me-2" />
+                                    <SiFlask className="me-2" />
                                     <FaDatabase />
                                 </CardService>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6 col-12" id="serviceCard">
-                            <div data-aos="flip-right" data-aos-duration="500">
+                            <div data-aos="flip-right">
                                 <CardService
                                     title="Développement Mobile"
                                     content="Avec React Native, je développe des solutions mobiles adaptées à vos exigences."
                                 >
                                     <FaReact className="me-2" />
-                                    <FaPython className="me-2" />
+                                    <SiFlask className="me-2" />
                                     <FaDatabase />
                                 </CardService>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <img
-                    src={LineImg}
-                    alt=""
-                    className="detail"
-                    data-aos="zoom-in"
-                    data-aos-duration="500"
-                />
+                    </Row>
+                </Container>
+                <LineDeco />
             </section>
 
             {/* Contact */}
             <section className="py-5" id="contact">
                 <div className="container py-5">
-                    <div className="row justify-content-center text-center mb-lg-5 mb-md-3 mb-sm-3">
-                        <div className="col-lg-6 col-md-8 col-12">
-                            <small className="title-section mb-2" data-aos="fade-up" data-aos-duration="500">En savoir plus</small>
-                            <h1 className="fs-3" data-aos="fade-up" data-aos-duration="500">
-                                <span className="text-bold">Contact</span>
-                            </h1>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center mb-5">
+                    <TitleSection title="Contact" label="En savoir plus" />
+                    <Row className="justify-content-center mb-5">
                         <div className="col-lg-8">
-                            <div className="row">
+                            <Row>
                                 <div className="col-md-5 pe-lg-5 pe-md-2">
                                     <div className="row mb-3">
                                         <div className="col-12">
-                                            <div data-aos="fade-up" data-aos-duration="500">
+                                            <div data-aos="fade-up">
                                                 <SocialMedia
                                                     name="LinkedIn"
                                                     link="https://www.linkedin.com/in/david-busakay-21b591273/"
@@ -477,7 +411,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                         <div className="col-12">
-                                            <div data-aos="fade-up" data-aos-duration="500">
+                                            <div data-aos="fade-up">
                                                 <SocialMedia
                                                     name="Facebook"
                                                     link="https://web.facebook.com/profile.php?id=100087745565507"
@@ -487,7 +421,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                         <div className="col-12">
-                                            <div data-aos="fade-up" data-aos-duration="500">
+                                            <div data-aos="fade-up">
                                                 <SocialMedia
                                                     name="GitHub"
                                                     link="https://github.com/DavidBusakay/"
@@ -502,63 +436,18 @@ const Home = () => {
                                 <div className="col-md-7">
                                     <ContactForm />
                                 </div>
-                            </div>
+                            </Row>
                         </div>
-                    </div>
+                    </Row>
                 </div>
             </section>
 
-            <img
+            <Image
                 src={FooterImg}
                 alt=""
                 className="img-waves"
             />
-        </main>
-    )
-}
-
-const ModalDetails = ({ show, handleClose }) => {
-    return (
-        <Modal
-            show={show}
-            onHide={handleClose}
-            size="lg"
-            centered
-            scrollable
-            className="bg-blur"
-        >
-            <Modal.Header className="border-0" closeButton closeVariant="white">
-                <Modal.Title className="text-bold">
-                    <span>Projet web</span>
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="pt-1">
-                <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                    Voluptas molestiae delectus laudantium cum magnam labore unde consectetur.
-                </p>
-                <div className="table-responsive">
-                    <table className="table table-striped table-bordered table-dark">
-                        <thead>
-                            <tr className="text-center">
-                                <th>Front-end</th>
-                                <th>Back-end</th>
-                                <th>Base de données</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </Modal.Body>
-            <Modal.Footer className="border-0">
-                <a
-                    type="button"
-                    href="#"
-                    className="btn btn-light button"
-                    target="_blank"
-                >Visiter le site</a>
-            </Modal.Footer>
-        </Modal>
+        </>
     )
 }
 

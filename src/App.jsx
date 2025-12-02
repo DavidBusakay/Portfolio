@@ -7,14 +7,16 @@ import Aos from "aos"
 import "aos/dist/aos.css"
 import { useEffect, useState } from "react"
 import { FaArrowUp } from "react-icons/fa6"
+import { Button } from "react-bootstrap"
 
 const App = () => {
     const [_, setItems] = useState([])
-
+	const [showBtn, setShowBtn] = useState(false)
+	
+	// AOS
 	useEffect(() => {
-		Aos.init({ easing: "ease-in-out" })
+		Aos.init({ easing: "ease-in-out", duration: "350" })
 	}, [])
-
 	useEffect(() => {
 		const fetchData = async () => {
 			await new Promise(resolve => setTimeout(resolve, 1000))
@@ -24,31 +26,34 @@ const App = () => {
 		fetchData()
 	}, [])
 
+	// BTN SCROLL UP
+	const handleClik = () => {
+		const targetSection = document.getElementById("landingPage")
+		if (targetSection) {
+			targetSection.scrollIntoView({
+				behavior: "smooth"
+			})
+		}
+	}
+
 	useEffect(() => {
-		const btnScrollUp = document.getElementById("btnScrollUp");
-    	const targetSection = document.getElementById("landingPage");
+		setShowBtn(false)
+    	const targetSection = document.getElementById("landingPage")
 
 		const handleScroll = () => {
-			const scrollPos = window.scrollY || document.documentElement.scrollTop;
-			const top = targetSection.offsetTop;
+			const scrollPos = window.scrollY || document.documentElement.scrollTop
+			const top = targetSection.offsetTop
 
 			if (scrollPos <= top + 700) {
-				btnScrollUp.style.transform = "translateY(80px)";
+				setShowBtn(false)
 			} else {
-				btnScrollUp.style.transform = "translateY(0)";
+				setShowBtn(true)
 			}
 		}
-
-		const handleClickBtnScrollUp = () => {
-			targetSection.scrollIntoView({ behavior: "smooth" });
-		}
-
 		window.addEventListener("scroll", handleScroll)
-		btnScrollUp.addEventListener("click", handleClickBtnScrollUp)
 
 		return () => {
 			window.removeEventListener("scroll", handleScroll)
-			btnScrollUp.removeEventListener("click", handleClickBtnScrollUp)
 		}
 	}, [])
 
@@ -56,22 +61,23 @@ const App = () => {
         <>
             <Header />
 
-            <Routes>
-                <Route path="/" element={ <Home /> } />
-            </Routes>
+			<main>
+				<Routes>
+					<Route path="/" element={ <Home /> } />
+				</Routes>
+			</main>
 
             <Footer />
 
-			<button
+			<Button
 				type="button"
 				className="button btn-scroll-up"
-				id="btnScrollUp"
 				aria-label="Remonter"
+				onClick={handleClik}
+				style={{ transform: showBtn ? "translateY(0)" : "translateY(80px)" }}
 			>
 				<FaArrowUp style={{ pointerEvents: "none" }} />
-			</button>
-
-			<div className="overlay" />
+			</Button>
         </>
     )
 }

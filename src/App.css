@@ -128,7 +128,7 @@ button.btn-close:focus {
     transform: scale(1.04);
 }
 .bg-blur {
-    background-color: var(--orange-secondary);
+    background-color: #0000002f;
     backdrop-filter: blur(10px);
 }
 .card {
@@ -220,22 +220,22 @@ button.btn-close:focus {
 .navigation:hover {
     box-shadow: 0 7px 30px #e5d0a981;
 }
-.navigation .wrapper-logo {
+.wrapper-logo {
     overflow: hidden;
     border-radius: 50%;
     width: 40px;
     height: 40px;
 }
-.navigation .wrapper-logo .logo {
+.wrapper-logo .logo {
     object-fit: cover;
     width: 100%;
     height: 100%;
 }
-.navigation .custom-navbar .nav-item .nav-link {
+.nav-item .nav-link {
     color: var(--text-color);
 }
-.navigation .custom-navbar .nav-item .nav-link:hover,
-.navigation .custom-navbar .nav-item .nav-link.active {
+.nav-item .nav-link:hover,
+.nav-item .nav-link.active {
     color: var(--orange-primary);
 }
 
@@ -261,29 +261,6 @@ button.btn-close:focus {
 }
 #aboutMe .window-content {
     text-align: justify;
-}
-#aboutMe .name {
-    position: absolute;
-    bottom: -50px;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    user-select: none;
-    pointer-events: none;
-    transition: bottom 0.3s ease-in-out;
-}
-#aboutMe .name div {
-    background-color: var(--orange-primary);
-    border-radius: var(--btn-border-radius);
-    box-shadow: 0 3px 15px #00000078;
-    width: max-content;
-    margin-bottom: 0.8rem;
-    padding: 0.4rem 0.9rem;
-}
-#aboutMe .name div p {
-    color: var(--btn-text-color);
-    margin: 0;
 }
 /* Portfolio */
 #portfolio {
@@ -369,8 +346,7 @@ button.btn-close:focus {
     box-shadow: 0 0.7rem 1rem rgba(0, 0, 0, 0.166);
 }
 #contact .social-media:hover .wrapper-icon {
-    box-shadow: 0 0 10px #ffd99336;
-    transform: scale(1.02);
+    box-shadow: 0 0 20px #ffd99347;
 }
 
 /* Formulaire */
@@ -428,12 +404,10 @@ footer a:hover {
 }
 
 /* Modal */
-.modal .modal-title, .modal p {
-    color: rgb(227, 227, 227);
-}
 .modal-content {
     background-color: var(--body-color);
     border-radius: 1rem;
+    box-shadow: 0 0 2rem #00000074;
     padding: 0.5rem;
 }
 
@@ -447,7 +421,7 @@ footer a:hover {
     margin: 0 auto;
 }
 .typewriter-animation {
-    animation: typewriter 3s steps(20) 1.6s infinite normal both, blinkingCursor 500ms step-end infinite;
+    animation: typewriter 3s steps(20) 0s infinite normal both, blinkingCursor 500ms step-end infinite;
 }
 @keyframes typewriter {
     0%, 100% { width: 0; }
@@ -503,9 +477,6 @@ footer a:hover {
     .navigation .navbar-brand {
         margin-left: 15px;
     }
-    .navigation .offcanvas-body {
-        background-color: var(--body-color);
-    }
     #aboutMe .detail,
     #portfolio .detail,
     #competences .detail,
@@ -516,7 +487,6 @@ footer a:hover {
 }
 @media (max-width: 768px) {
     .menu-portfolio .nav-tabs .nav-item button {
-        font-size: 0.6rem;
         margin: 0 0.35rem 0;
     }
 }
